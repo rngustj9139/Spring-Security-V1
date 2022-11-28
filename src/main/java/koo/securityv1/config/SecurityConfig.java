@@ -16,7 +16,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/manager/**").access("hasRole('ROLE_ADMIN' or hasRole('ROLE_MANAGER'))")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .anyRequest().permitAll(); // default login 페이지 안 뜰 것임
+                .anyRequest().permitAll() // default login 페이지 안 뜰 것임
+                .and()
+                .formLogin()
+                .loginPage("/login"); // 로그인 없이 user, manager, admin 페이지로 이동하면 로그인 페이지로 이동하게 된다.
     }
+
+//    @Bean // 기존 WebSecurityConfigurerAdapter가 disabled됨, 아래 소스 사용
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable();
+//        http.authorizeRequests()
+//                .antMatchers("/user/**").authenticated()
+//                .antMatchers("/manager/**").access("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+//                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+//                .anyRequest().permitAll();
+//
+//        return http.build();
+//    }
 
 }
