@@ -13,26 +13,31 @@ public class IndexController {
         return "인덱스 페이지 입니다.";
     }
 
+    @ResponseBody
     @GetMapping("/user")
     public String user() {
         return "user";
     }
 
+    @ResponseBody
     @GetMapping("/admin")
     public String admin() {
         return "admin";
     }
 
+    @ResponseBody
     @GetMapping("/manager")
     public String manager() {
         return "manager";
     }
 
+    @ResponseBody
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
+    @ResponseBody
     @GetMapping("/join")
     public String join() {
         return "join";
