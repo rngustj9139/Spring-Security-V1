@@ -31,21 +31,20 @@ public class IndexController {
         return "manager";
     }
 
-    @GetMapping("/login")
-    public String login() {
+    @GetMapping("/loginForm")
+    public String loginForm() {
         return "loginForm";
+    }
+
+    @GetMapping("/joinForm")
+    public String joinForm() {
+        return "joinForm";
     }
 
     @ResponseBody
     @GetMapping("/join")
     public String join() {
         return "join";
-    }
-
-    @ResponseBody
-    @GetMapping("/joinProc")
-    public String joinProc() {
-        return "회원가입 완료됨!";
     }
 
 }
