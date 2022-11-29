@@ -31,10 +31,9 @@ public class IndexController {
         return "manager";
     }
 
-    @ResponseBody
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "loginForm";
     }
 
     @ResponseBody
