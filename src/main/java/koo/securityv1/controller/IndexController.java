@@ -1,10 +1,14 @@
 package koo.securityv1.controller;
 
+import koo.securityv1.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@Slf4j
 public class IndexController {
 
     @ResponseBody
@@ -42,8 +46,10 @@ public class IndexController {
     }
 
     @ResponseBody
-    @GetMapping("/join")
-    public String join() {
+    @PostMapping("/join")
+    public String join(User user) {
+        log.info("user = {}", user);
+
         return "join";
     }
 
