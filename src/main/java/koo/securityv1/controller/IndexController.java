@@ -1,7 +1,10 @@
 package koo.securityv1.controller;
 
 import koo.securityv1.model.User;
+import koo.securityv1.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,7 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class IndexController {
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @ResponseBody
     @GetMapping("/")
@@ -45,12 +52,16 @@ public class IndexController {
         return "joinForm";
     }
 
-    @ResponseBody
     @PostMapping("/join")
     public String join(User user) {
         log.info("user = {}", user);
+        user.setRole("ROLE_USER");
+        String rawPassword = user.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        user.setPassword(encPassword);
+        userRepository.save(user); // 패스워드 암호화가 안되었을 경우는 시큐리티 사용불가
 
-        return "join";
+        return "redirect:/loginform";
     }
 
 }

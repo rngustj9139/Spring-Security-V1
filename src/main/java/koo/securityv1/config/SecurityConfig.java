@@ -1,13 +1,20 @@
 package koo.securityv1.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean
+    public BCryptPasswordEncoder encodePwd() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -19,7 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll() // default login 페이지 안 뜰 것임
                 .and()
                 .formLogin()
-                .loginPage("/loginForm"); // 로그인 없이 user, manager, admin 페이지로 이동하면 로그인 페이지로 이동하게 된다.
+                .loginPage("/loginForm") // 로그인 없이 user, manager, admin 페이지로 이동하면 로그인 페이지로 이동하게 된다.
+                .loginProcessingUrl("/login") // /login 이라는 주소가 호출이 되면 시큐리티가 낚아채서 대신 로그인을 진행해준다.
+                .defaultSuccessUrl("/"); // 로그인 성공후 이동할 경로
     }
 
 //    @Bean // 기존 WebSecurityConfigurerAdapter가 disabled됨, 아래 소스 사용
