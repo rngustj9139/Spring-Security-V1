@@ -2,6 +2,7 @@ package koo.securityv1.auth;
 
 import koo.securityv1.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,10 +15,14 @@ import java.util.Collection;
  * 세션에 들어갈 수 있는 정보(오브젝트)는 Authentication 객체
  * Authentication 안에는 User 정보가 있어야함 => 유저 정보를 담는 오브젝트의 타입은 UserDetails 객체이다.
  * **/
-@RequiredArgsConstructor
 public class PrincipalDetails implements UserDetails { // UserDetails에 접근하는 방법 => 일단 UserDetails를 상속받기, PrincipalDetails는 UserDetails의 성격을 가짐 이제 PrincipalDetails를 Authentication안에 넣을 수 있다.
 
-    private final User user;
+    @Autowired
+    private User user;
+
+    public PrincipalDetails(User user) {
+        this.user = user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { // 해당 User의 권한을 리턴하는 곳
