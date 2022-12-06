@@ -4,6 +4,7 @@ import koo.securityv1.model.User;
 import koo.securityv1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +62,14 @@ public class IndexController {
         user.setPassword(encPassword);
         userRepository.save(user); // 패스워드 암호화가 안되었을 경우는 시큐리티 사용불가
 
-        return "redirect:/loginform";
+        return "redirect:/loginForm";
+    }
+
+    @Secured("ROLE_ADMIN")
+    @ResponseBody
+    @GetMapping("/info")
+    public String info() {
+        return "개인정보";
     }
 
 }
