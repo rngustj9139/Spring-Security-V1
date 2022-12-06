@@ -30,7 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/loginForm") // 로그인 없이 user, manager, admin 페이지로 이동하면 로그인 페이지로 이동하게 된다.
                 .loginProcessingUrl("/login") // /login 이라는 주소가 호출이 되면 시큐리티가 낚아채서 대신 로그인을 진행해준다.
-                .defaultSuccessUrl("/"); // 로그인 성공후 이동할 경로
+                .defaultSuccessUrl("/") // 로그인 성공후 이동할 경로
+                .and()
+                .oauth2Login() // 이걸 추가해야 /oauth2/authorization/google 접속시 로그인 창이 뜬다.
+                .loginPage("/loginForm"); // 이걸 추가해야 /oauth2/authorization/google 접속시 로그인 창이 뜬다.
+        /**
+         * http://localhost:8080/login/oauth2/code/google
+         * 로그인을 완료하면 구글 서버쪽에서 위의 리다이렉션 uri를 통해 코드를 발급받음 이때 이 코드를 이용해 access token을 요청하고 발급받을 수 있는데
+         * 이 access token으로 사용자 대신 우리 서버가 구글 서버를 사용자의 개인정보나 민감한 정보에 접근할 수 있는 권한이 생긴다.
+         * 클라이언트 id와 클라이언트 보안 비밀번호(클라이언트 secret)는 다른사람에게 노출되지 않게 관리해야한다.
+         * **/
     }
 
 //    @Bean // 기존 WebSecurityConfigurerAdapter가 disabled됨, 아래 소스 사용
