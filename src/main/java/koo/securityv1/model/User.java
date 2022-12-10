@@ -25,4 +25,7 @@ public class User {
     @CreationTimestamp
     private Timestamp createDate;
 
+    private String provider; // 소셜 로그인시 사용(ex: google, facebook, naver)
+    private String providerId; // 소셜 로그인시 사용(ex: 109742856182916427686) (PrincipalOAuth2UserService.class 참고)
+
 }
