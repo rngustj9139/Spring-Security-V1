@@ -1,5 +1,7 @@
 package koo.securityv1.config;
 
+import koo.securityv1.config.oauth.PrincipalOauth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,7 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화 (IndexController의 info라는 함수 위에 @Secured("ROLE_ADMIN") 어노테이션 붙이면 Admin만 접근 가능) prePostEnabled는 @PreAuthorize어노테이션 활성화(여러개의 권한을 걸고싶을때 사용)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -33,12 +38,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/") // 로그인 성공후 이동할 경로
                 .and()
                 .oauth2Login() // 이걸 추가해야 /oauth2/authorization/google 접속시 로그인 창이 뜬다.
-                .loginPage("/loginForm"); // 이걸 추가해야 /oauth2/authorization/google 접속시 로그인 창이 뜬다.
+                .loginPage("/loginForm") // 이걸 추가해야 /oauth2/authorization/google 접속시 로그인 창이 뜬다.
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService); // 구글 로그인이 완료된 뒤 후처리 수행
         /**
          * http://localhost:8080/login/oauth2/code/google
          * 로그인을 완료하면 구글 서버쪽에서 위의 리다이렉션 uri를 통해 코드를 발급받음 이때 이 코드를 이용해 access token을 요청하고 발급받을 수 있는데
          * 이 access token으로 사용자 대신 우리 서버가 구글 서버를 사용자의 개인정보나 민감한 정보에 접근할 수 있는 권한이 생긴다.
          * 클라이언트 id와 클라이언트 보안 비밀번호(클라이언트 secret)는 다른사람에게 노출되지 않게 관리해야한다.
+         * 구글 로그인이 완료되면 access token + 사용자프로필 정보를 한방에 받는다.
          * **/
     }
 

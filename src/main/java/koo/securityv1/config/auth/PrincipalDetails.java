@@ -1,7 +1,6 @@
-package koo.securityv1.auth;
+package koo.securityv1.config.auth;
 
 import koo.securityv1.model.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
