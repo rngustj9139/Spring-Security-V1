@@ -40,4 +40,6 @@ public class User {
         this.providerId = providerId;
     }
 
+    public User() {
+    }
 }
