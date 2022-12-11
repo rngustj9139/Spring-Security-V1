@@ -1,5 +1,10 @@
 package koo.securityv1.config.oauth;
 
+import koo.securityv1.config.auth.PrincipalDetails;
+import koo.securityv1.model.User;
+import koo.securityv1.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -8,6 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * 구글로그인 후 후처리 되는 함수(구글로부터 받은 userRequest 데이터에 대한 후처리 되는 함수)
@@ -23,9 +34,30 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // userRequest 정보를 통해 loadUser 함수를 호출하고 구글로부터 회원프로필 정보를 받는다.
         System.out.println("getAttributes: " + super.loadUser(userRequest).getAttributes()); // 이곳에 유저 정보가 들어있다. (긴 숫자 ID값과 이름, 이메일, 사진정보가 들어있다. username을 google_10974285618291642 이런식으로 지으면 된다.)
 
+        // 강제로 회원가입 진행(이미 회원가입 되어있을 경우에는 진행 안함)
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        String provider = userRequest.getClientRegistration().getClientId(); // google
+        String providerId = oAuth2User.getAttribute("sub");
+        String email = oAuth2User.getAttribute("email");
+        String username = provider + "_" + providerId;
+        String password = bCryptPasswordEncoder.encode("겟인데어"); // 크게 의미 없음
+        String role = "ROLE_USER";
 
-        return super.loadUser(userRequest);
+        User userEntity = userRepository.findByUsername(username);
+        if (userEntity == null) {
+            userEntity = User.builder()
+                    .username(username)
+                    .password(password)
+                    .email(email)
+                    .role(role)
+                    .provider(provider)
+                    .providerId(providerId)
+                    .build();
+
+            userRepository.save(userEntity);
+        }
+
+        return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
     }
 
 }

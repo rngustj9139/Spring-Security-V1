@@ -1,5 +1,6 @@
 package koo.securityv1.model;
 
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -27,5 +28,16 @@ public class User {
 
     private String provider; // 소셜 로그인시 사용(ex: google, facebook, naver)
     private String providerId; // 소셜 로그인시 사용(ex: 109742856182916427686) (PrincipalOAuth2UserService.class 참고)
+
+    @Builder // 빌더 패턴 이용
+    public User(String username, String password, String email, String role, Timestamp createDate, String provider, String providerId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.createDate = createDate;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 
 }

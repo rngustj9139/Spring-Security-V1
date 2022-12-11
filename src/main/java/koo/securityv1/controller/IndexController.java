@@ -33,7 +33,9 @@ public class IndexController {
 
     @ResponseBody
     @GetMapping("/user")
-    public String user() {
+    public String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails.getUser()" + principalDetails.getUser());
+
         return "user";
     }
 
@@ -87,14 +89,26 @@ public class IndexController {
 
     @ResponseBody
     @GetMapping("/test/login") // 소셜 로그인 말고 일반 로그인 사용하기
-    public String testLogin(Authentication authentication, @AuthenticationPrincipal UserDetails userDetails) {
+    public String testLogin(Authentication authentication, @AuthenticationPrincipal PrincipalDetails userDetails) { // @AuthenticationPrincipal 어노테이션을 통해 세션에 접근 가능
         System.out.println("test/login =========");
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal(); // Authentication을 통해서도 세션에 접근가능
         System.out.println("principalDetails.getUser(): " + principalDetails.getUser());
 
-        System.out.println("userDetails.getUsername(): " + userDetails.getUsername());
+        System.out.println("userDetails.getUsername(): " + userDetails.getUser());
 
         return "세션 정보 확인하기";
+    }
+
+    @ResponseBody
+    @GetMapping("/test/oauth/login") // 소셜로그인 사용하기
+    public String testOAuthLogin(Authentication authentication, @AuthenticationPrincipal OAuth2User oauth) {
+        System.out.println("test/oauth/login =========");
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal(); // Authentication을 통해서도 세션에 접근가능
+        System.out.println("oAuth2User.getAttributes(): " + oAuth2User.getAttributes());
+
+        System.out.println("oauth: " + oauth.getAttributes());
+
+        return "OAuth 세션 정보 확인하기";
     }
 
 }
