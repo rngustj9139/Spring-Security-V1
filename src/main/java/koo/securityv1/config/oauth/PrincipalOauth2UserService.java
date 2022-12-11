@@ -57,7 +57,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             userRepository.save(userEntity);
         }
 
-        return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+        return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // 이때 리턴된 UserDetails가 Authentication 안으로 들어가게 된다.
     }
 
 }
