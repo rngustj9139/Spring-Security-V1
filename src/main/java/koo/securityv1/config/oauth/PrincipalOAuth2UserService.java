@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
+public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

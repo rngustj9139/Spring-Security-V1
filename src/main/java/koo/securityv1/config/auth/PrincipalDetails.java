@@ -23,12 +23,25 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User { // UserDetails에 접근하는 방법 => 일단 UserDetails를 상속받기, PrincipalDetails는 UserDetails의 성격을 가짐 이제 PrincipalDetails를 Authentication안에 넣을 수 있다.
 
     private User user; // User를 품기(User에 접근 가능해짐)
-    private Map<String, Object> attributes; // 아래 getAttributes()와 getName() 함수에서 쓰임임
+    private Map<String, Object> attributes; // 아래 getAttributes()와 getName() 함수에서 쓰임
 
     public PrincipalDetails(User user) { // 일반 로그인 할 때 사용
         this.user = user;
     }
 
+    /**
+     * attributes는
+     * {
+     *     sub=109742856182916427686,
+     *     name=구현서,
+     *     given_name=현서,
+     *     family_name=구,
+     *     picture=https://lh3.googleusercontent.com/-cP67SVp6dA0,
+     *     email_verified=true,
+     *     locale=ko
+     * }
+     * 와 같은 데이터를 담고있다.
+     **/
     public PrincipalDetails(User user, Map<String, Object> attributes) { // OAuth 로그인 할 때 사용
         this.user = user;
         this.attributes = attributes;
@@ -78,19 +91,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User { // UserDetail
         return true;
     }
 
-    /**
-     * attributes는
-     * {
-     *     sub=109742856182916427686,
-     *     name=구현서,
-     *     given_name=현서,
-     *     family_name=구,
-     *     picture=https://lh3.googleusercontent.com/-cP67SVp6dA0,
-     *     email_verified=true,
-     *     locale=ko
-     * }
-     * 와 같은 데이터를 담고있다.
-     **/
     @Override
     public Map<String, Object> getAttributes() { // OAuth2User의 함수
         return attributes;

@@ -1,14 +1,12 @@
 package koo.securityv1.config;
 
-import koo.securityv1.config.oauth.PrincipalOauth2UserService;
+import koo.securityv1.config.oauth.PrincipalOAuth2UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨
@@ -16,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final PrincipalOauth2UserService principalOauth2UserService;
+    private final PrincipalOAuth2UserService principalOauth2UserService;
 
 //    @Bean
 //    public BCryptPasswordEncoder encodePwd() {
