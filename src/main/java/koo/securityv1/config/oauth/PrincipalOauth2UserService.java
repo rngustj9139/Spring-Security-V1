@@ -45,6 +45,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         User userEntity = userRepository.findByUsername(username);
         if (userEntity == null) {
+            System.out.println("구글로그인이 최초입니다.");
             userEntity = User.builder()
                     .username(username)
                     .password(password)
@@ -55,6 +56,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .build();
 
             userRepository.save(userEntity);
+        } else {
+            System.out.println("구글로그인이 최초가 아닙니다.");
         }
 
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // 이때 리턴된 UserDetails가 Authentication 안으로 들어가게 된다.
