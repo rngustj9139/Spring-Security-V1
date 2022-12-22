@@ -1,6 +1,9 @@
 package koo.securityv1.config.oauth;
 
 import koo.securityv1.config.auth.PrincipalDetails;
+import koo.securityv1.config.oauth.provider.FacebookUserInfo;
+import koo.securityv1.config.oauth.provider.GoogleUserInfo;
+import koo.securityv1.config.oauth.provider.OAuth2UserInfo;
 import koo.securityv1.model.User;
 import koo.securityv1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +39,30 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         // 강제로 회원가입 진행(이미 회원가입 되어있을 경우에는 진행 안함)
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        String provider = userRequest.getClientRegistration().getRegistrationId(); // google
-        String providerId = oAuth2User.getAttribute("sub"); // google에는 sub(긴 숫자 id)가 존재하지만 페이스북에서는 존재하지 않는다.(null)
-        String email = oAuth2User.getAttribute("email");
+        OAuth2UserInfo oAuth2UserInfo = null;
+
+        if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            System.out.println("구글 소셜 로그인 요청");
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            System.out.println("페이스북 소셜 로그인 요청");
+            oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else {
+            System.out.println("구글과 페이스북 소셜 로그인만 지원합니다.");
+        }
+
+//      String provider = userRequest.getClientRegistration().getRegistrationId(); // google
+//      String providerId = oAuth2User.getAttribute("sub"); // google에는 sub(긴 숫자 id)가 존재하지만 페이스북에서는 존재하지 않는다.(null)
+//      String email = oAuth2User.getAttribute("email");
+//      String username = provider + "_" + providerId;
+//      String password = bCryptPasswordEncoder.encode("겟인데어"); // 크게 의미 없음
+//      String role = "ROLE_USER";
+
+        String provider = oAuth2UserInfo.getProvider();
+        String providerId = oAuth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
-        String password = bCryptPasswordEncoder.encode("겟인데어"); // 크게 의미 없음
+        String password = bCryptPasswordEncoder.encode("겟인데어");
+        String email = oAuth2UserInfo.getEmail();
         String role = "ROLE_USER";
 
         User userEntity = userRepository.findByUsername(username);
