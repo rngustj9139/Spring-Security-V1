@@ -27,17 +27,17 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         System.out.println("userRequest: " + userRequest);
-        System.out.println("getClientRegistration: " + userRequest.getClientRegistration()); // registrationId로 어떤 소셜 플랫폼에서 로그인했는지 확인가능(ex-google)
+        System.out.println("getClientRegistration: " + userRequest.getClientRegistration());
         System.out.println("getAccessToken: " + userRequest.getAccessToken());
-        System.out.println("getRegistrationId: " + userRequest.getClientRegistration().getRegistrationId());
+        System.out.println("getRegistrationId: " + userRequest.getClientRegistration().getRegistrationId()); // registrationId로 어떤 소셜 플랫폼에서 로그인했는지 확인가능(ex-google)
         // access token을 받고 나서까지만 userRequest 정보에 들어있고, 회원 프로플 정보를 받을 때 사용되는게 loadUser 함수
         // userRequest 정보를 통해 loadUser 함수를 호출하고 구글로부터 회원프로필 정보를 받는다.
         System.out.println("getAttributes: " + super.loadUser(userRequest).getAttributes()); // 이곳에 유저 정보가 들어있다. (긴 숫자 ID값과 이름, 이메일, 사진정보가 들어있다. username을 google_10974285618291642 이런식으로 지으면 된다.)
 
         // 강제로 회원가입 진행(이미 회원가입 되어있을 경우에는 진행 안함)
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        String provider = userRequest.getClientRegistration().getClientId(); // google
-        String providerId = oAuth2User.getAttribute("sub");
+        String provider = userRequest.getClientRegistration().getRegistrationId(); // google
+        String providerId = oAuth2User.getAttribute("sub"); // google에는 sub(긴 숫자 id)가 존재하지만 페이스북에서는 존재하지 않는다.(null)
         String email = oAuth2User.getAttribute("email");
         String username = provider + "_" + providerId;
         String password = bCryptPasswordEncoder.encode("겟인데어"); // 크게 의미 없음
@@ -45,7 +45,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         User userEntity = userRepository.findByUsername(username);
         if (userEntity == null) {
-            System.out.println("구글로그인이 최초입니다.");
+            System.out.println("소셜로그인이 최초입니다.");
             userEntity = User.builder()
                     .username(username)
                     .password(password)
@@ -57,7 +57,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
             userRepository.save(userEntity);
         } else {
-            System.out.println("구글로그인이 최초가 아닙니다.");
+            System.out.println("소셜로그인이 최초가 아닙니다.");
         }
 
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // 이때 리턴된 UserDetails가 Authentication 안으로 들어가게 된다.
