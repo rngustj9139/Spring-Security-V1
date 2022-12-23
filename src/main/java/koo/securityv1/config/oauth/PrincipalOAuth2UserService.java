@@ -3,6 +3,7 @@ package koo.securityv1.config.oauth;
 import koo.securityv1.config.auth.PrincipalDetails;
 import koo.securityv1.config.oauth.provider.FacebookUserInfo;
 import koo.securityv1.config.oauth.provider.GoogleUserInfo;
+import koo.securityv1.config.oauth.provider.NaverUserInfo;
 import koo.securityv1.config.oauth.provider.OAuth2UserInfo;
 import koo.securityv1.model.User;
 import koo.securityv1.repository.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
@@ -47,6 +50,9 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
             System.out.println("페이스북 소셜 로그인 요청");
             oAuth2UserInfo = new FacebookUserInfo(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) { // 네이버의 getAttributes: {resultcode=00, message=success, response={id=d_6sW8FZ3gN6xYVS_1o-fA7zeuFswLw1DK0mwrw29Mw, email=mnb9139@naver.com, name=구현서}}
+            System.out.println("네이버 소셜 로그인 요청");
+            oAuth2UserInfo = new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
         } else {
             System.out.println("구글과 페이스북 소셜 로그인만 지원합니다.");
         }
