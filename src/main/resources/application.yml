@@ -42,3 +42,13 @@ spring:
             scope:
               - email
               - public_profile
+          naver:
+            client-id:
+            client-secret:
+            scope:
+              - email
+              - name
+              - profile_image
+            client-name: Naver
+            authorization-grant-type: authorization_code # 네이버도 기본적으로 Authorization code grant type 방식을 이용한다 (코드를 부여받고 엑세스 토큰을 받음)
+            redirect-uri: http://localhost:8080/login/oauth2/code/naver # code를 받는 주소
