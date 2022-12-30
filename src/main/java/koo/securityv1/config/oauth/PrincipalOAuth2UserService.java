@@ -54,7 +54,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
             System.out.println("네이버 소셜 로그인 요청");
             oAuth2UserInfo = new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
         } else {
-            System.out.println("구글과 페이스북 소셜 로그인만 지원합니다.");
+            System.out.println("구글과 페이스북, 네이버 소셜 로그인만 지원합니다.");
         }
 
 //      String provider = userRequest.getClientRegistration().getRegistrationId(); // google
