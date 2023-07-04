@@ -19,7 +19,7 @@ public class PrincipalDetailsService implements UserDetailsService { // Authenti
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // username은 로그인할때 넘어오는 username 프로퍼티
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { // username은 로그인할때 넘어오는 username 프로퍼티 (다른 속성값으로 이용하고싶으면 SecurityConfig에서 .loginPage("") 아래 .usernameParameter("")로 변경해야한다)
         User userEntity = userRepository.findByUsername(username);// 먼저 해당 username을 갖는 유저가 존재하는지 확인
 
         if (userEntity != null) {
