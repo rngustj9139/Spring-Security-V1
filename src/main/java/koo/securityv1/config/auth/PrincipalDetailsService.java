@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 /**
  * SecurityConfig에서 loginProcessingUrl("/login")
  * /login 요청이 오면 자동으로 스프링 컨테이너에 올라가있는 PrincipalDetailsService의 loadUserByUsername 함수가 실행 된다.
+ * /logout으로 들어가면 저절로 세션이 해제된다.
  * **/
 @Service
 public class PrincipalDetailsService implements UserDetailsService { // Authentication을 만들고 PrincipalDetals(UserDetails)를 Authentication에 넣는 역할
