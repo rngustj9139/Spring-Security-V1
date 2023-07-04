@@ -24,6 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        return new BCryptPasswordEncoder();
 //    }
 
+    // /logout으로 들어가면 저절로 세션이 해제된다.
+    // 로그인안하고 /user로 들어가면 로그인 페이지가 뜨고 그때 로그인하면 /user란 페이지로 자동으로 이동한다.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
