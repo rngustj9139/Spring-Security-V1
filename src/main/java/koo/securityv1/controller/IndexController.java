@@ -31,18 +31,6 @@ public class IndexController {
         return "인덱스 페이지 입니다.";
     }
 
-    /**
-     * OAuth2 로그인을 해도 PrincipalDetails를 받을 수 있고
-     * 일반 로그인을 해도 PrincipalDetails를 받을 수 있다.
-     **/
-    @ResponseBody
-    @GetMapping("/user")
-    public String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("principalDetails.getUser()" + principalDetails.getUser());
-
-        return "user";
-    }
-
     @ResponseBody
     @GetMapping("/admin")
     public String admin() {
@@ -113,6 +101,18 @@ public class IndexController {
         System.out.println("oauth: " + oauth.getAttributes());
 
         return "OAuth 세션 정보 확인하기";
+    }
+
+    /**
+     * OAuth2 로그인을 해도 PrincipalDetails를 받을 수 있고
+     * 일반 로그인을 해도 PrincipalDetails를 받을 수 있다.
+     **/
+    @ResponseBody
+    @GetMapping("/user")
+    public String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails.getUser()" + principalDetails.getUser());
+
+        return "user";
     }
 
 }

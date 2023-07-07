@@ -28,7 +28,7 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
     /**
      * 구글로그인 후 후처리 되는 함수(구글로부터 받은 userRequest 데이터에 대한 후처리 되는 함수)
-     * 구글로그인 후 엑세스 토큰과 사용자 정보가 userRequest에 담겨있음음
+     * 구글로그인 후 엑세스 토큰과 사용자 정보가 userRequest에 담겨있음
      **/
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

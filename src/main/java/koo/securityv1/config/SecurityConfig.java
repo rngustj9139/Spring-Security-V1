@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화 (IndexController의 info라는 함수 위에 @Secured("ROLE_ADMIN") 어노테이션 붙이면 Admin만 접근 가능) prePostEnabled는 @PreAuthorize어노테이션 활성화(여러개의 권한을 걸고싶을때 사용)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @Secured 어노테이션 활성화 (IndexController의 info라는 함수 위에 @Secured("ROLE_ADMIN") 어노테이션 붙이면 Admin만 접근 가능) prePostEnabled는 @PreAuthorize어노테이션 활성화(여러개의 권한을 걸고싶을때 사용)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
